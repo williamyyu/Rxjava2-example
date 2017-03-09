@@ -7,56 +7,69 @@ import android.util.Log;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
-public class NormalActivity extends AppCompatActivity {
+public class AsyncActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /* 想像是檯燈：接收來自開關按鈕的訊息 */
-        Observer<String> observer = new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.e("test", "onSubscribe");
-            }
+        taskSubscribeOnNewThread();
+    }
 
+    private void defaultUsage() {
+        // Consumer 是 Observer 的一種，但他只處理 onNext 訊息，其他訊息都會忽略 (onError, onComplete))
+        Consumer<String> consumer = new Consumer<String>() {
             @Override
-            public void onNext(String string) {
-                // 收到 開/關 的訊息
-                Log.e("test", "onNext: " + string);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                Log.e("test", "onError:" + t.getLocalizedMessage());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.e("test", "onComplete");
+            public void accept(String s) throws Exception {
+                Log.e("test", "Observer thread is : " + Thread.currentThread().getName());
             }
         };
 
-        /* 想像是開關按鈕：發送 開/關 的訊息給檯燈 */
         Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                // 使用 ObservableEmitter 來發送訊息
-                emitter.onNext("on");
-                emitter.onNext("off");
+                Log.e("test", "Observable thread is : " + Thread.currentThread().getName());
+
                 emitter.onNext("on");
                 emitter.onComplete();
             }
         });
-        
-        // 把檯燈跟開關按鈕串連起來
-        observable.subscribe(observer);
 
-        // 簡單的寫法，會自動呼叫onComplete
-        Observable.just("on", "off", "on").subscribe(observer);
+        // observable 和 observer 預設都會跑在 main thread 上
+        observable.subscribe(consumer);
+    }
+
+    private void taskSubscribeOnNewThread() {
+        Consumer<String> consumer = new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Log.e("test", "Observer thread is : " + Thread.currentThread().getName());
+            }
+        };
+
+        Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.e("test", "Observable thread is : " + Thread.currentThread().getName());
+
+                emitter.onNext("on");
+                emitter.onComplete();
+            }
+        });
+
+        observable
+                //  'subscribeOn' only the first time is work
+                .subscribeOn(Schedulers.newThread())
+                //  this line will not work
+                .subscribeOn(AndroidSchedulers.mainThread())
+
+                //  'observeOn' can be called several times
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer);
     }
 }
