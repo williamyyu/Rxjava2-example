@@ -1,7 +1,6 @@
 package com.example.willy.rxjava2;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import io.reactivex.Observable;
@@ -11,7 +10,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public class DisposableActivity extends AppCompatActivity {
+public class DisposableActivity extends BaseActivity {
 
     private CompositeDisposable mCompositeDisposable;
 
@@ -33,7 +32,7 @@ public class DisposableActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e("test", "onSubscribe");
+                Log.e(TAG, "onSubscribe");
                 mDisposable = d;
 
                 // 可以把所有 Disposable 新增到 CompositeDisposable，以便一次全部 dispose
@@ -43,23 +42,23 @@ public class DisposableActivity extends AppCompatActivity {
             @Override
             public void onNext(String string) {
                 // 收到 開/關 的訊息
-                Log.e("test", "onNext: " + string);
+                Log.e(TAG, "onNext: " + string);
 
                 // 收到 off 的訊息後切斷與開關按鈕的聯繫
                 if (string.equals("off")) {
                     mDisposable.dispose();
-                    Log.e("test", "isDisposed : " + mDisposable.isDisposed());
+                    Log.e(TAG, "isDisposed : " + mDisposable.isDisposed());
                 }
             }
 
             @Override
             public void onError(Throwable t) {
-                Log.e("test", "onError:" + t.getLocalizedMessage());
+                Log.e(TAG, "onError:" + t.getLocalizedMessage());
             }
 
             @Override
             public void onComplete() {
-                Log.e("test", "onComplete");
+                Log.e(TAG, "onComplete");
             }
         };
 

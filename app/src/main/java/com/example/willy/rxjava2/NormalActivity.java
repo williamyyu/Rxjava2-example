@@ -1,7 +1,6 @@
 package com.example.willy.rxjava2;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import io.reactivex.Observable;
@@ -10,7 +9,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class NormalActivity extends AppCompatActivity {
+public class NormalActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,23 +20,23 @@ public class NormalActivity extends AppCompatActivity {
         Observer<String> observer = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e("test", "onSubscribe");
+                Log.e(TAG, "onSubscribe");
             }
 
             @Override
             public void onNext(String string) {
                 // 收到 開/關 的訊息
-                Log.e("test", "onNext: " + string);
+                Log.e(TAG, "onNext: " + string);
             }
 
             @Override
             public void onError(Throwable t) {
-                Log.e("test", "onError:" + t.getLocalizedMessage());
+                Log.e(TAG, "onError:" + t.getLocalizedMessage());
             }
 
             @Override
             public void onComplete() {
-                Log.e("test", "onComplete");
+                Log.e(TAG, "onComplete");
             }
         };
 
