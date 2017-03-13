@@ -14,7 +14,7 @@ public class NormalActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_normal);
 
         /* 想像是檯燈：接收來自開關按鈕的訊息 */
         Observer<String> observer = new Observer<String>() {
@@ -51,7 +51,7 @@ public class NormalActivity extends BaseActivity {
                 emitter.onComplete();
             }
         });
-        
+
         // 把檯燈跟開關按鈕串連起來
         observable.subscribe(observer);
 
