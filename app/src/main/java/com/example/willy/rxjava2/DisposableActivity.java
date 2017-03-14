@@ -25,7 +25,7 @@ public class DisposableActivity extends BaseActivity {
         Observer<String> observer = new Observer<String>() {
 
             /*
-                調用dispose後，會切斷檯燈與開關按鈕的聯繫
+                調用dispose後，會切斷檯燈與開關按鈕連接的電線
                 但開關按鈕仍會繼續發送訊息，只是檯燈接收不到
              */
             private Disposable mDisposable;
@@ -74,7 +74,7 @@ public class DisposableActivity extends BaseActivity {
             }
         });
 
-        // 把檯燈跟開關按鈕串連起來
+        // 把檯燈跟開關按鈕用電線連接起來
         observable.subscribe(observer);
     }
 
@@ -82,7 +82,7 @@ public class DisposableActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        // 一次切斷所有聯繫
+        // 一次切斷所有電線
         mCompositeDisposable.clear();
     }
 }

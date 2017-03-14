@@ -22,7 +22,7 @@ public class MapActivity extends BaseActivity {
         Consumer<String> consumer = new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
-                Log.e(TAG, "onNext: " + s);
+                Log.d(TAG, "onNext: " + s);
             }
         };
 

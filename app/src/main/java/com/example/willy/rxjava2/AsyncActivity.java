@@ -27,14 +27,14 @@ public class AsyncActivity extends BaseActivity {
         Consumer<String> consumer = new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
-                Log.e(TAG, "Observer thread is : " + Thread.currentThread().getName());
+                Log.d(TAG, "Observer thread is : " + Thread.currentThread().getName());
             }
         };
 
         Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                Log.e(TAG, "Observable thread is : " + Thread.currentThread().getName());
+                Log.d(TAG, "Observable thread is : " + Thread.currentThread().getName());
 
                 emitter.onNext("on");
                 emitter.onComplete();
@@ -49,14 +49,14 @@ public class AsyncActivity extends BaseActivity {
         Consumer<String> consumer = new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
-                Log.e(TAG, "Observer thread is : " + Thread.currentThread().getName());
+                Log.d(TAG, "Observer thread is : " + Thread.currentThread().getName());
             }
         };
 
         Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                Log.e(TAG, "Observable thread is : " + Thread.currentThread().getName());
+                Log.d(TAG, "Observable thread is : " + Thread.currentThread().getName());
 
                 emitter.onNext("on");
                 emitter.onComplete();
@@ -73,14 +73,14 @@ public class AsyncActivity extends BaseActivity {
                 .doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
-                        Log.e(TAG, "After observeOn main thread : " + Thread.currentThread().getName());
+                        Log.d(TAG, "After observeOn main thread : " + Thread.currentThread().getName());
                     }
                 })
                 .observeOn(Schedulers.io())
                 .doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
-                        Log.e(TAG, "After observeOn io thread : " + Thread.currentThread().getName());
+                        Log.d(TAG, "After observeOn io thread : " + Thread.currentThread().getName());
                     }
                 })
                 .subscribe(consumer);

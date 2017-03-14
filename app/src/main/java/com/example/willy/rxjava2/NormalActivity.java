@@ -20,23 +20,23 @@ public class NormalActivity extends BaseActivity {
         Observer<String> observer = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e(TAG, "onSubscribe");
+                Log.d(TAG, "onSubscribe");
             }
 
             @Override
             public void onNext(String string) {
                 // 收到 開/關 的訊息
-                Log.e(TAG, "onNext: " + string);
+                Log.d(TAG, "onNext: " + string);
             }
 
             @Override
             public void onError(Throwable t) {
-                Log.e(TAG, "onError:" + t.getLocalizedMessage());
+                Log.d(TAG, "onError:" + t.getLocalizedMessage());
             }
 
             @Override
             public void onComplete() {
-                Log.e(TAG, "onComplete");
+                Log.d(TAG, "onComplete");
             }
         };
 
@@ -52,7 +52,7 @@ public class NormalActivity extends BaseActivity {
             }
         });
 
-        // 把檯燈跟開關按鈕串連起來
+        // 把檯燈跟開關按鈕用電線連接起來
         observable.subscribe(observer);
 
         // 簡單的寫法，會自動呼叫onComplete
