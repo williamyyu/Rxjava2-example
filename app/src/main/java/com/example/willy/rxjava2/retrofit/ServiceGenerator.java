@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
-    private static final String BASE_URL = "https://jsonplaceholder.typicode.com";
+    private static final String BASE_URL = "https://reqres.in/api/";
 
     private static final OkHttpClient sOkHttpClient = new OkHttpClient.Builder()
 //            .addInterceptor(new Interceptor() {

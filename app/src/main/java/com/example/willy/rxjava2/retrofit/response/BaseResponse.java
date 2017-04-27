@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class BaseResponse {
-    public static final int SUCCESS_CODE = 0;
+    public static final int SUCCESS_CODE = 200;
 
     private String mMessage;
     private int mCode;

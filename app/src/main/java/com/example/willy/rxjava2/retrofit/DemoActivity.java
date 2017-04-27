@@ -4,17 +4,15 @@ import android.os.Bundle;
 
 import com.example.willy.rxjava2.BaseActivity;
 import com.example.willy.rxjava2.R;
-import com.example.willy.rxjava2.retrofit.response.PostResponse;
-
-import java.util.List;
+import com.example.willy.rxjava2.retrofit.object.User;
+import com.example.willy.rxjava2.retrofit.response.UserResponse;
+import com.example.willy.rxjava2.retrofit.transformer.DefaultTransformer;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 public class DemoActivity extends BaseActivity {
@@ -24,30 +22,22 @@ public class DemoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_normal);
 
-        ServiceGenerator.createService(ApiService.class)
-                .getPosts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new Function<Response<List<PostResponse>>, List<PostResponse>>() {
+        ServiceGenerator.createService(ApiService.class).getUsers()
+                .compose(new DefaultTransformer<Response<UserResponse>, UserResponse>())
+                .flatMap(new Function<UserResponse, ObservableSource<User>>() {
                     @Override
-                    public List<PostResponse> apply(Response<List<PostResponse>> listResponse) throws Exception {
-                        return listResponse.body();
+                    public ObservableSource<User> apply(UserResponse userResponse) throws Exception {
+                        return Observable.fromIterable(userResponse.getUsers());
                     }
                 })
-                .flatMap(new Function<List<PostResponse>, ObservableSource<PostResponse>>() {
-                    @Override
-                    public ObservableSource<PostResponse> apply(List<PostResponse> postResponses) throws Exception {
-                        return Observable.fromIterable(postResponses);
-                    }
-                })
-                .subscribe(new Observer<PostResponse>() {
+                .subscribe(new Observer<User>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(PostResponse postResponse) {
+                    public void onNext(User user) {
 
                     }
 
